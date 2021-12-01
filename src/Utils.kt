@@ -12,4 +12,14 @@ fun readInput(name: String) = File("src", "$name.txt").readLines()
  */
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)
 
-fun List<String>.toInts() : List<Int> = this.map { it.toInt() }
+fun List<String>.toInts(): List<Int> = this.map { it.toInt() }
+
+fun <T, R> printResultOf(partBlock: (List<T>) -> R) = { list: List<T> -> println(partBlock(list)) }
+
+class ExpectedResultChecker<T, R>(val partBlock: (List<T>) -> R) {
+    infix fun returns(expectedResult: R) = { list: List<T> -> check(partBlock(list) == expectedResult) }
+
+    companion object {
+        fun <T> verify(partBlock: (List<T>) -> Int) = ExpectedResultChecker(partBlock)
+    }
+}

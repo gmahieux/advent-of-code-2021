@@ -1,16 +1,19 @@
+import ExpectedResultChecker.Companion.verify
+
 fun main() {
     fun part1(input: List<Int>): Int = input.windowed(2).count { (prev, cur) -> cur > prev }
 
     fun part2(input: List<Int>): Int = input
         .windowed(size = 3) { it.sum() }
-        .windowed(2).count { (prev, cur) -> cur > prev }
+        .let(::part1)
 
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput.toInts()) == 7)
-    check(part2(testInput.toInts()) == 5)
+     readInput("Day01_test")
+        .toInts()
+        .also(verify(::part1) returns 7)
+        .also(verify(::part2) returns 5)
 
-    val input = readInput("Day01")
-    println(part1(input.toInts()))
-    println(part2(input.toInts()))
+    readInput("Day01")
+        .toInts()
+        .also(printResultOf(::part1))
+        .also(printResultOf(::part2))
 }
