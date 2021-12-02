@@ -17,7 +17,11 @@ fun List<String>.toInts(): List<Int> = this.map { it.toInt() }
 fun <T, R> printResultOf(partBlock: (List<T>) -> R) = { list: List<T> -> println(partBlock(list)) }
 
 class ExpectedResultChecker<T, R>(val partBlock: (List<T>) -> R) {
-    infix fun returns(expectedResult: R) = { list: List<T> -> check(partBlock(list) == expectedResult) }
+    infix fun returns(expectedResult: R) = { list: List<T> ->
+        partBlock(list)
+            .let { actualResult -> check(actualResult == expectedResult) { "Expected $expectedResult but was $actualResult" } }
+
+    }
 
     companion object {
         fun <T> verify(partBlock: (List<T>) -> Int) = ExpectedResultChecker(partBlock)
