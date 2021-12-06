@@ -24,7 +24,7 @@ class ExpectedResultChecker<T, R>(val partBlock: (List<T>) -> R) {
     }
 
     companion object {
-        fun <T> verify(partBlock: (List<T>) -> Int) = ExpectedResultChecker(partBlock)
+        fun <T,R> verify(partBlock: (List<T>) -> R) = ExpectedResultChecker(partBlock)
     }
 }
 
